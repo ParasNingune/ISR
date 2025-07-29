@@ -1,0 +1,13 @@
+boy : 2
+was : 2
+walk : 6
+quick : 2
+accident : 2
+dropp : 2
+use : 2
+device : 2
+riv : 2
+he : 2
+hop : 2
+find : 2
+happi : 2
