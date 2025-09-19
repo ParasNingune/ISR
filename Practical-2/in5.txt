@@ -1,0 +1,11 @@
+boy : 1
+walk : 1
+quick : 1
+accident : 0
+dropp : 0
+use : 1
+device : 0
+river : 0
+hop : 0
+find : 1
+happy : 5

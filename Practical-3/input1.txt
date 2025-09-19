@@ -1,0 +1,3 @@
+Information retrieval is the process of obtaining relevant documents.
+Searching and indexing are important tasks.
+The system must remove stopwords and perform stemming efficiently.

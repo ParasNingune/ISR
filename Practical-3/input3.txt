@@ -1,0 +1,3 @@
+Natural language processing deals with text and speech.
+Applications include search engines, translation, and summarization.
+Retrieval systems benefit from stemming and removing stopwords.

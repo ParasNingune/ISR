@@ -15,107 +15,98 @@ string words[MAX_WORDS];
 int freq[MAX_WORDS];
 int wordCount = 0;
 
-string suffixes[MAX_SUFFIXES] = {"ing", "ed", "ly", "ness", "ful", "ment", "tion", "sion", "er", "est", "able", "ible", "al", "ic", "ous", "ive", "y", "es", "s"};
+string suffixes[MAX_SUFFIXES] = {
+    "ing", "ed", "ly", "ness", "ful", "ment", "tion", "sion", "est", "able", "ible", "al", "ic", "ous", "ive", "y", "es", "s"
+};
 
-
-// Change to lower case
-string toLower(string s) 
-{
-    for (int i = 0; i < s.length(); i++) 
-    {
-        if (s[i] >= 'A' && s[i] <= 'Z') 
-        {
+// Convert to lowercase
+string toLower(string s) {
+    for (int i = 0; i < s.length(); i++) {
+        if (s[i] >= 'A' && s[i] <= 'Z') {
             s[i] = s[i] + 32;
         }
     }
     return s;
 }
 
-
-// Remove punctuations
-string clean(string s) 
-{
+// Remove punctuation and non-alphabetic characters
+string clean(string s) {
     string result = "";
-    for (int i = 0; i < s.length(); i++) 
-    {
-        if (isalpha(s[i])) 
-        {
+    for (int i = 0; i < s.length(); i++) {
+        if (isalpha(s[i])) {
             result += s[i];
         }
     }
-
     return result;
 }
 
-
-// Load stopwords
-void loadStopwords(const string& filename) 
-{
+// Load stopwords from file
+void loadStopwords(const string& filename) {
     ifstream file(filename);
     string word;
-    while (file >> word) 
-    {
+    while (file >> word) {
         stopwords[stopwordCount++] = toLower(clean(word));
     }
-
     file.close();
 }
 
-// Check if stopword
-bool isStopword(const string& word) 
-{
-    for (int i = 0; i < stopwordCount; i++) 
-    {
-        if (stopwords[i] == word) 
-        {
+// Check if a word is a stopword
+bool isStopword(const string& word) {
+    for (int i = 0; i < stopwordCount; i++) {
+        if (stopwords[i] == word) {
             return true;
         }
     }
     return false;
 }
 
+string stripSuffix(string word) {
+    int len = word.length();
 
-// Remove suffix
-string stripSuffix(string word) 
-{
-    for (int i = 0; i < MAX_SUFFIXES; i++) 
-    {
+    if (len > 4 && word.substr(len - 5) == "iness") {
+        return word.substr(0, len - 5) + "y";
+    }
+
+    if (len > 5 && word.substr(len - 3) == "ing") {
+        return word.substr(0, len - 3);
+    }
+
+    if (len > 3 && word.substr(len - 2) == "es") {
+        return word.substr(0, len - 2);
+    }
+
+    if (len > 3 && word.substr(len - 2) == "ed") {
+        return word.substr(0, len - 2);
+    }
+
+    if (len > 5 && word.substr(len - 3) == "ful") {
+        return word.substr(0, len - 3);
+    }
+
+    if (len > 6 && word.substr(len - 4) == "ness") {
+        return word.substr(0, len - 4);
+    }
+
+    if (len > 4 && word.substr(len - 2) == "ly") {
+        return word.substr(0, len - 2);
+    }
+
+    // Remove basic suffixes if above didn’t match
+    for (int i = 0; i < MAX_SUFFIXES; i++) {
         string suff = suffixes[i];
-        int wlen = word.length();
         int slen = suff.length();
-        bool match = true;
-        if (wlen > slen + 2) 
-        {
-            for (int j = 0; j < slen; j++) 
-            {
-                if (word[wlen - slen + j] != suff[j]) 
-                {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) 
-            {
-                string root = "";
-                for (int k = 0; k < wlen - slen; k++) 
-                {
-                    root += word[k];
-                }
-                return root;
-            }
+        if (len > slen + 2 && word.substr(len - slen) == suff) {
+            return word.substr(0, len - slen);
         }
     }
+
     return word;
 }
 
-
 // Add or update word frequency
-void addWord(const string& word) 
-{
-    for (int i = 0; i < wordCount; i++) 
-    {
-        if (words[i] == word) 
-        {
+void addWord(const string& word) {
+    for (int i = 0; i < wordCount; i++) {
+        if (words[i] == word) {
             freq[i]++;
             return;
         }
@@ -125,27 +116,23 @@ void addWord(const string& word)
     wordCount++;
 }
 
-int main() 
-{
+int main() {
     loadStopwords("stopwords.txt");
 
     ifstream input("input.txt");
-    if (!input) 
-    {
+    if (!input) {
         cout << "Could not open input file.\n";
         return 1;
     }
 
     ofstream output("output.txt");
-    if (!output) 
-    {
+    if (!output) {
         cout << "Could not create output file.\n";
         return 1;
     }
 
     string word;
-    while (input >> word) 
-    {
+    while (input >> word) {
         word = toLower(clean(word));
         if (word == "" || isStopword(word)) continue;
         word = stripSuffix(word);
@@ -153,8 +140,7 @@ int main()
     }
     input.close();
 
-    for (int i = 0; i < wordCount; i++) 
-    {
+    for (int i = 0; i < wordCount; i++) {
         output << words[i] << " : " << freq[i] << "\n";
     }
 
