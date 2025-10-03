@@ -46,7 +46,7 @@ def get_weather(city, api_key):
         print(f"An unexpected error occurred: {e}")
 
 def main():
-    print("🌤️  Live Weather Report Application")
+    print("Live Weather Report Application")
     print("="*50)
 
     
@@ -67,7 +67,7 @@ def main():
             print("Please enter a valid city name!")
             continue
         
-        print(f"\n🔍 Fetching weather data for {city_name}...")
+        print(f"\nFetching weather data for {city_name}...")
         get_weather(city_name, api_key)
         
         continue_choice = input("\n🔄 Check another city? (y/n): ").strip().lower()
